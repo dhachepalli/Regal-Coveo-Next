@@ -1,0 +1,22 @@
+{
+  "name": "atomic-next-samples",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "targets": {
+    "cached:build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "if [ \"$DEPLOYMENT_ENVIRONMENT\" != \"CDN\" ]; then npx next build; fi",
+          "if [ \"$DEPLOYMENT_ENVIRONMENT\" != \"CDN\" ]; then tsc --noEmit; fi",
+          "if [ \"$DEPLOYMENT_ENVIRONMENT\" != \"CDN\" ]; then tsc --module commonjs --noEmit; fi"
+        ],
+        "parallel": true,
+        "cwd": "packages/samples/atomic-next"
+      }
+    },
+    "build": {
+      "dependsOn": ["cached:build"],
+      "executor": "nx:noop"
+    }
+  }
+}
